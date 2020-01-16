@@ -17,9 +17,6 @@ long long gcd(long long a,long long b){
     a=std::abs(a);
     b=std::abs(b);
     if(a>b)std::swap(a,b);
-    if(b==0){
-        return 0;
-    }
     if(a==0){
         return b;
     }
