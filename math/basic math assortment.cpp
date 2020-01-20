@@ -89,6 +89,22 @@ std::vector<long long> primearray(long long N){
     return R;
 }
 
+//素因数分解
+std::vector<long long> prime_factorization(long long N){
+    std::vector<long long> R;
+    if(N<2)return R;
+    for(int i=2;i*i<=N;i++){
+        while(N%i==0){
+            R.push_back(i);
+            N/=i;
+        }
+    }
+    if(N!=1){
+        R.push_back(N);
+    }
+    return R;
+}
+
 //累乗(繰り返し二乗法)
 long long power(long long b,long long e,long long MOD=INT_MAX){
     long long r=1;
