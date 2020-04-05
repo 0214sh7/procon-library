@@ -1,4 +1,4 @@
-std::vector<long long> LIS(std::vector<long long> A){
+long long LIS(std::vector<long long> A){
     int N=A.size();
     std::vector<long long> D;
     for(int i=0;i<N;i++){
@@ -9,5 +9,5 @@ std::vector<long long> LIS(std::vector<long long> A){
             D[pos]=A[i];
         }
     }
-    return D;
+    return D.size();
 }
