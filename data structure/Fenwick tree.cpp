@@ -1,4 +1,4 @@
-class Fewnick_tree{
+class Fenwick_tree{
     private:
     std::vector<long long> BIT;
     
