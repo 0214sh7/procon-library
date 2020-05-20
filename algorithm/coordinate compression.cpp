@@ -1,20 +1,32 @@
-std::vector<int> compress(std::vector<int> D){
-    std::map<int,int> G;
-    std::vector<int> E,r;
-    int s=D.size();
-    for(int i=0;i<s;i++){
-        E.push_back(D[i]);
-    }
-    sort(E.begin(),E.end());
-    int t=0;
-    for(int i=0;i<s;i++){
-        if(i!=0 && E[i]!=E[i-1]){
-            t++;
+class compress{
+    private:
+    std::vector<int> E;
+    
+    public:
+    void init(std::vector<long long> A){
+        E.clear();
+        sort(A.begin(),A.end());
+        for(int i=0;i<A.size();i++){
+            if(i==0 || A[i]!=A[i-1]){
+                E.push_back(A[i]);
+            }
         }
-        G[E[i]]=t;
     }
-    for(int i=0;i<s;i++){
-        r.push_back(G[D[i]]);
+    
+    int size(){
+        return (int)E.size();
     }
-    return r;
-}
+    
+    int value(int x){
+        if(0<=x && x<(int)E.size()){
+            return E[x];
+        }else{
+            return 0;
+        }
+    }
+    
+    int index(int X){
+        return (upper_bound(E.begin(),E.end(),X))-E.begin()-1;
+    }
+    
+};
