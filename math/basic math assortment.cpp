@@ -52,6 +52,23 @@ long long lcm(long long a,long long b){
     return s / b * t;
 }
 
+//約数列挙
+std::vector<long long> divisor_enum(long long N){
+    std::vector<long long> R;
+    if(N<=0)return R;
+    long long s=0;
+    for(long long i=1;i*i<=N;i++){
+        if(N%i==0){
+            R.push_back(i);
+            if(i*i!=N)s++;
+        }
+    }
+    for(long long i = s-1;i>=0;i--){
+        R.push_back(N/R[i]);
+    }
+    return R;
+}
+
 //素数判定
 bool prime(long long X){
     if(X<2)return false;
