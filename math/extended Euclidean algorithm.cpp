@@ -1,8 +1,5 @@
 std::pair<long long,std::pair<long long,long long>> extgcd(long long a,long long b){
-    /*
-    Copyright (c) 2021 0214sh7
-    https://github.com/0214sh7/library/
-    */
+    
     std::vector<long long> q;
     while(b!=0){
         long long r = a%b;
