@@ -71,7 +71,7 @@ class double_sweep{
     }
     
     std::pair<int,int> vertex(void){
-        return std::make_pair(V1,V2);
+        return std::make_pair(V2,V1);
     }
     
     std::vector<int> pass(void){
