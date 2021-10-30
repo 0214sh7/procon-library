@@ -55,7 +55,7 @@ std::vector<std::pair<long long,long long>> arg_sort(std::vector<std::pair<long 
            return (y.first*x.second < x.first*y.second);
         }
         
-        return x.first < y.first;
+        return abs(x.first) < abs(y.first);
     });
     
     std::vector<std::pair<long long,long long>> B(N);
