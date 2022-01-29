@@ -1,22 +1,33 @@
+template<typename T>
 class segmenttree{
+    /*
+    Copyright (c) 2022 0214sh7
+    https://github.com/0214sh7/library/
+    */
     private:
     int n;
-    long long identity = 0;//単位元
-    std::vector<long long> dat;
+    
+    std::vector<T> dat;
+    std::function<T(T,T)> calc;
+    T identity;
     public:
     
-    void init(int N){
+    void init(int N,std::function<T(T,T)> func,T Identity){
         n=1;
         while(n<N)n*=2;
-        dat.clear();
+        dat.resize(2*n-1);
         for(int i=0;i<2*n-1;++i){
-            dat.push_back(identity);
+            dat[i]=Identity;
         }
+        calc = func;
+        identity = Identity;
     }
     
-    long long calc();
+    segmenttree(int N,std::function<T(T,T)> func,T Identity){
+        init(N,func,Identity);
+    }
     
-    void update(int k,long long a){
+    void update(int k,T a){
         k+=n-1;
         dat[k]=a;
         while(k>0){
@@ -25,28 +36,24 @@ class segmenttree{
         }
     }
     
-    long long query(long long a,long long b){
-        a+=n;
-        b+=n;
-        long long R=0;
+    T query(int a,int b){
+        a+=n-1;
+        b+=n-1;
+        T L= identity,R = identity;
         while(a < b){
-            if(a % 2 == 1){
-                R = calc(R, dat[a - 1]);
-                a += 1;
+            if(a % 2 == 0){
+                L = calc(L,dat[a]);
+                a++;
             }
-            a /= 2;
-            if(b % 2 == 1){
-                b -= 1;
-                R = calc(R, dat[b - 1]);
+            a = (a-1)/2;
+            if(b % 2 == 0){
+                R = calc(dat[b-1],R);
+                b--;
             }
-            b /= 2;
+            b = (b-1)/2;
         }
+        R = calc(L,R);
         return R;
-    }
-    
-    long long calc(long long a,long long b){
-        //your monoid here
-        return a+b;
     }
     
 };
