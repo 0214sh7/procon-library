@@ -1,13 +1,13 @@
 class rollinghash{
     private:
-    const long long mod = (1LL << 61)-1;
+    static constexpr long long mod = (1LL << 61)-1;
     std::vector<long long> Base = {12345,10000000};
     std::vector<long long> BaseInv;
     std::vector<std::vector<long long>> BaseInvExp;
-    const long long h = 100;
+    static constexpr long long h = 100;
     
     long long product(long long a,long long b){
-        const long long m = 1LL << 31;
+        static constexpr long long m = 1LL << 31;
         long long a1 = a/m,a2 = a%m;
         long long b1 = b/m,b2 = b%m;
         
@@ -35,10 +35,10 @@ class rollinghash{
     }
     
     public:
-    std::string S;
+    std::vector<long long> S;
     std::vector<std::vector<long long>> H,Hsum;
     
-    void init(std::string cs){
+    void init(std::vector<long long> cs){
         S=cs;
         int n=S.size();
         
@@ -46,24 +46,24 @@ class rollinghash{
         BaseInvExp.resize(Base.size());
         H.resize(Base.size());
         Hsum.resize(Base.size());
-        for(int i=0;i<Base.size();i++){
+        for(int i=0;i<(int)Base.size();i++){
             BaseInvExp[i].assign(n+1,1);
             H[i].assign(n+1,0);
             Hsum[i].assign(n+1,0);
         }
         
         //逆元
-        for(int i=0;i<Base.size();i++){
+        for(int i=0;i<(int)Base.size();i++){
             BaseInv[i]=power(Base[i],mod-2);
         }
-        for(int i=0;i<Base.size();i++){
+        for(int i=0;i<(int)Base.size();i++){
             for(int j=0;j<n;j++){
                 BaseInvExp[i][j+1] = product(BaseInvExp[i][j],BaseInv[i]);
             }
         }
         
         //本体
-        for(int i=0;i<Base.size();i++){
+        for(int i=0;i<(int)Base.size();i++){
             long long b=1;
             for(int j=0;j<n;j++){
                 H[i][j]=product(b,S[j]+h);
@@ -72,25 +72,48 @@ class rollinghash{
         }
         
         //累積和
-        for(int i=0;i<Base.size();i++){
+        for(int i=0;i<(int)Base.size();i++){
             for(int j=0;j<n;j++){
                 Hsum[i][j+1]=(Hsum[i][j]+H[i][j])%mod;
             }
         }
     }
     
-    rollinghash(std::string S){
-        init(S);
+    rollinghash(std::vector<long long> C){
+        init(C);
     }
     
     std::vector<long long> get(int l,int r){
-        std::vector<long long> R;
-        for(int i=0;i<Base.size();i++){
+        std::vector<long long> R(Base.size());
+        for(int i=0;i<(int)Base.size();i++){
             long long g = (Hsum[i][r]-Hsum[i][l]+mod)%mod;
             g=product(g,BaseInvExp[i][l]);
-            R.push_back(g);
+            R[i] = g;
         }
         return R;
+    }
+    
+    std::vector<long long> instant(std::vector<long long> P){
+        std::vector<long long> R;
+        for(int i=0;i<(int)Base.size();i++){
+            long long r = 0, b = 1;
+            for(int j=0;j<(int)P.size();j++){
+                r = (r+product(b,P[j]+h))%mod;
+                b = product(b,Base[i]);
+            }
+            R.push_back(r);
+        }
+        return R;
+    }
+    
+    std::vector<long long> connect(std::vector<long long> P,long long ps,std::vector<long long> Q,long long qs){
+        std::vector<long long> R;
+        for(int i=0;i<(int)Base.size();i++){
+            long long r = (product(Q[i],power(Base[i],ps))+P[i])%mod;
+            R.push_back(r);
+        }
+        return R;
+        assert(qs==qs);
     }
     
 };
